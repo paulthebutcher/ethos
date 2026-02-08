@@ -8,8 +8,8 @@ const anthropic = new Anthropic({
 
 // GitHub config
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const GITHUB_OWNER = process.env.GITHUB_OWNER || "paulbutcher";
-const GITHUB_REPO = process.env.GITHUB_REPO || "Guildry";
+const GITHUB_OWNER = process.env.GITHUB_OWNER || "paulthebutcher";
+const GITHUB_REPO = process.env.GITHUB_REPO || "ethos";
 const GITHUB_BRANCH = process.env.GITHUB_BRANCH || "main";
 
 // GitHub API helper
@@ -450,10 +450,17 @@ export async function POST(request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check GitHub token
+    // Check required env vars
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return NextResponse.json(
+        { error: "ANTHROPIC_API_KEY not configured. Add it to Vercel environment variables." },
+        { status: 500 }
+      );
+    }
+
     if (!GITHUB_TOKEN) {
       return NextResponse.json(
-        { error: "GitHub token not configured" },
+        { error: "GITHUB_TOKEN not configured. Add it to Vercel environment variables." },
         { status: 500 }
       );
     }
@@ -469,25 +476,30 @@ export async function POST(request) {
 - Viewing commit history
 - Creating branches and pull requests
 
-The repository is a Turborepo monorepo with this structure:
-/guildry (monorepo root)
+The repository (paulthebutcher/ethos) is an npm workspaces monorepo:
+
+/                           # Repo root
 ├── apps/
-│   ├── ethos/          # theaiethos.com - main hub site (Next.js)
-│   │   ├── app/        # Pages and API routes
-│   │   ├── app/landing/[id]  # Product landing pages
-│   │   ├── app/projects      # Project listing
-│   │   └── app/dev           # This dev assistant
-│   └── guildry/        # guildry.theaiethos.com - main product (Next.js)
+│   ├── ethos/              # theaiethos.com - hub site
+│   │   ├── app/            # Next.js App Router pages
+│   │   ├── app/landing/    # Product landing pages
+│   │   ├── app/projects/   # Project showcase
+│   │   └── app/dev/        # This dev assistant
+│   └── guildry/            # guildry.theaiethos.com
 │       ├── app/
 │       ├── components/
 │       └── lib/
 ├── packages/
-│   ├── ui/             # Shared UI components
-│   ├── database/       # Database utilities (Supabase)
-│   └── ai/             # AI utilities
-└── docs/               # Documentation
+│   ├── auth/               # Clerk auth integration
+│   ├── ui/                 # Shared React components
+│   ├── database/           # Supabase utilities
+│   ├── ai/                 # Claude AI utilities
+│   └── config/             # Shared Tailwind/TS/ESLint
+├── templates/              # App scaffolding templates
+├── scripts/                # Utility scripts (new-app.sh)
+└── docs/
 
-IMPORTANT: Every write_file call creates a real commit to GitHub. Vercel will auto-deploy on push.
+IMPORTANT: Every write_file call creates a real commit to GitHub. Vercel auto-deploys on push.
 
 When making changes:
 1. Read the file first to understand current state
@@ -495,7 +507,7 @@ When making changes:
 3. Use clear commit messages
 4. For multiple related changes, consider creating a branch and PR
 
-Be concise. Show relevant code snippets, not entire files. When editing, show the specific changes you're making.`;
+Be concise. Show relevant code snippets, not entire files.`;
 
     // Call Claude with tools
     let response = await anthropic.messages.create({

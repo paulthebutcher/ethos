@@ -122,16 +122,16 @@ export default function DevAssistant() {
         body: JSON.stringify({ messages: apiMessages }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
         if (res.status === 401) {
           setIsAuthenticated(false);
           localStorage.removeItem("dev_auth_token");
           throw new Error("Authentication failed. Please re-enter your token.");
         }
-        throw new Error(`Request failed: ${res.status}`);
+        throw new Error(data.error || `Request failed: ${res.status}`);
       }
-
-      const data = await res.json();
 
       setMessages((prev) => [
         ...prev,
@@ -157,10 +157,10 @@ export default function DevAssistant() {
 
   // Quick action buttons
   const quickActions = [
-    { label: "📁 List files", prompt: "List the files in the ethos/app directory" },
-    { label: "📊 Git status", prompt: "What's the current git status?" },
+    { label: "📁 List apps", prompt: "List the apps directory to see all apps" },
+    { label: "📦 List packages", prompt: "List the packages directory to see shared code" },
     { label: "🔍 Search", prompt: "Search for " },
-    { label: "🏗️ Build", prompt: "Run a build for ethos to check for errors" },
+    { label: "📝 Recent commits", prompt: "Show me the 5 most recent commits" },
   ];
 
   if (!isAuthenticated) {
