@@ -1,0 +1,13 @@
+{
+  "name": "@ethos/meta",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./og": "./src/og.jsx"
+  },
+  "dependencies": {
+    "@vercel/og": "^0.6.0"
+  }
+}
