@@ -1,8 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "buildCommand": "pnpm turbo build --filter=@guildry/ethos",
-  "installCommand": "pnpm install",
+  "buildCommand": "cd ../.. && npm run build",
+  "installCommand": "cd ../.. && npm install --legacy-peer-deps",
+  "build": {
+    "env": {
+      "ENABLE_EXPERIMENTAL_COREPACK": "0"
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",
