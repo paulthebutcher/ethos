@@ -8,13 +8,11 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "lint": "turbo run lint"
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
   },
-  "devDependencies": {
-    "turbo": "^2.3.3"
-  },
+  "devDependencies": {},
   "engines": {
     "node": ">=20"
   }
