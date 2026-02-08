@@ -1,0 +1,37 @@
+/* Launchpad App Styles */
+
+.launchpad-app {
+  min-height: 100vh;
+  background: #0a0a0f;
+  color: #ffffff;
+}
+
+.launchpad-app ::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: #ffffff;
+}
+
+.launchpad-app ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.launchpad-app ::-webkit-scrollbar-track {
+  background: #12121a;
+}
+
+.launchpad-app ::-webkit-scrollbar-thumb {
+  background: #2a2a3a;
+  border-radius: 4px;
+}
+
+.launchpad-app ::-webkit-scrollbar-thumb:hover {
+  background: #3a3a4a;
+}
+
+/* Gradient text utility */
+.launchpad-gradient-text {
+  background: linear-gradient(135deg, #a78bfa, #818cf8, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

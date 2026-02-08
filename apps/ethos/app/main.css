@@ -1,0 +1,51 @@
+/* Main Ethos Site Styles */
+
+.ethos-app {
+  min-height: 100vh;
+  background: #ffffff;
+  color: #0c1929;
+}
+
+.ethos-app ::selection {
+  background: rgba(13, 148, 136, 0.2);
+  color: #0f172a;
+}
+
+.ethos-app ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ethos-app ::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+.ethos-app ::-webkit-scrollbar-thumb {
+  background: #dbeafe;
+  border-radius: 4px;
+}
+
+.ethos-app ::-webkit-scrollbar-thumb:hover {
+  background: #bfdbfe;
+}
+
+/* Gradient text utilities */
+.ethos-text-gradient {
+  background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ethos-text-gradient-blue {
+  background: linear-gradient(135deg, #38bdf8, #1d4ed8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ethos-text-gradient-warm {
+  background: linear-gradient(135deg, #d97706, #dc2626);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

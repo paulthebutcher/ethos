@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./launchpad.css";
 
 export const metadata: Metadata = {
   title: "Launchpad | Ship Your App Idea in Minutes",
@@ -21,7 +22,7 @@ export default function LaunchpadLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div data-theme="dark" className="min-h-screen bg-[#0a0a0f] text-white">
+    <div className="launchpad-app">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-xl">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
