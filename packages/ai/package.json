@@ -1,0 +1,15 @@
+{
+  "name": "@guildry/ai",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "echo 'No linting configured yet'"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.73.0",
+    "@guildry/database": "workspace:*",
+    "zod": "^4.3.6"
+  }
+}

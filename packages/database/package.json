@@ -1,0 +1,13 @@
+{
+  "name": "@guildry/database",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "echo 'No linting configured yet'"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.95.2"
+  }
+}
