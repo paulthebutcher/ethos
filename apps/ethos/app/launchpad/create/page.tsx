@@ -83,7 +83,6 @@ function ProposalEditorContent() {
     if (!proposal || !id) return;
 
     setLaunching(true);
-    // Navigate to the build progress page
     router.push(`/launchpad/create/build?id=${id}`);
   };
 
@@ -137,92 +136,111 @@ function ProposalEditorContent() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-        <div className="animate-spin h-8 w-8 border-4 border-violet-500 border-t-transparent rounded-full mx-auto mb-4" />
-        <p className="text-slate-400">Loading proposal...</p>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center px-6">
+        <div className="relative">
+          <div className="w-16 h-16 border-4 border-violet-500/30 rounded-full" />
+          <div className="absolute inset-0 w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin" />
+        </div>
+        <p className="text-white/60 mt-6">Loading proposal...</p>
       </div>
     );
   }
 
   if (error || !proposal) {
     return (
-      <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-        <p className="text-red-400 mb-4">{error || "Something went wrong"}</p>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center px-6 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center mb-6">
+          <span className="text-3xl">😕</span>
+        </div>
+        <p className="text-red-400 text-lg mb-2">{error || "Something went wrong"}</p>
+        <p className="text-white/40 mb-6">The proposal you&apos;re looking for couldn&apos;t be found.</p>
         <button
           onClick={() => router.push("/launchpad")}
-          className="text-violet-400 hover:text-violet-300"
+          className="text-violet-400 hover:text-violet-300 font-medium flex items-center gap-2 transition-colors"
         >
-          ← Back to Launchpad
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Launchpad
         </button>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8">
+    <div className="max-w-5xl mx-auto px-6 py-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 mb-8">
         <div>
           <button
             onClick={() => router.push("/launchpad")}
-            className="text-slate-400 hover:text-white text-sm mb-2 flex items-center gap-1"
+            className="text-white/40 hover:text-white text-sm mb-4 flex items-center gap-1.5 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Back
           </button>
-          <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-            <span
-              className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
-              style={{ backgroundColor: proposal.color + "20" }}
+          <div className="flex items-center gap-4">
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl shadow-lg"
+              style={{
+                backgroundColor: proposal.color + "20",
+                boxShadow: `0 8px 32px ${proposal.color}20`
+              }}
             >
               {proposal.icon}
-            </span>
-            {proposal.name}
-          </h1>
-          <p className="text-slate-400 mt-1">Review and customize your proposal</p>
+            </div>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">
+                {proposal.name}
+              </h1>
+              <p className="text-white/50 mt-1">Review and customize your proposal</p>
+            </div>
+          </div>
         </div>
         <button
           onClick={handleLaunch}
           disabled={launching}
-          className="bg-gradient-to-r from-violet-600 to-cyan-600 text-white font-semibold py-3 px-8 rounded-xl hover:from-violet-500 hover:to-cyan-500 transition-all disabled:opacity-50 flex items-center gap-2"
+          className="group relative bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-semibold py-3.5 px-8 rounded-xl transition-all disabled:opacity-50 shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 hover:scale-[1.02] active:scale-[0.98]"
         >
-          {launching ? (
-            <>
-              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
-              Launching...
-            </>
-          ) : (
-            <>
-              <span>🚀</span>
-              Launch App
-            </>
-          )}
+          <span className="flex items-center gap-2">
+            {launching ? (
+              <>
+                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Launching...
+              </>
+            ) : (
+              <>
+                <span>🚀</span>
+                Launch App
+              </>
+            )}
+          </span>
         </button>
       </div>
 
       {/* Original Idea */}
       {stored && (
-        <div className="bg-slate-800/30 border border-slate-700/50 rounded-xl p-4 mb-6">
-          <p className="text-slate-500 text-sm mb-1">Original idea</p>
-          <p className="text-slate-300">&ldquo;{stored.idea}&rdquo;</p>
+        <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-5 mb-8 backdrop-blur-sm">
+          <p className="text-white/40 text-sm mb-1.5 font-medium">Original idea</p>
+          <p className="text-white/80 leading-relaxed">&ldquo;{stored.idea}&rdquo;</p>
         </div>
       )}
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
         {(["details", "landing", "infra"] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded-lg font-medium transition-all ${
+            className={`px-5 py-2.5 rounded-xl font-medium transition-all whitespace-nowrap ${
               activeTab === tab
-                ? "bg-violet-600 text-white"
-                : "bg-slate-800/50 text-slate-400 hover:text-white"
+                ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-lg shadow-violet-500/25"
+                : "bg-white/5 text-white/50 hover:text-white hover:bg-white/10"
             }`}
           >
             {tab === "details" && "📋 App Details"}
@@ -233,27 +251,27 @@ function ProposalEditorContent() {
       </div>
 
       {/* Tab Content */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6">
+      <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-sm">
         {activeTab === "details" && (
           <div className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-white text-sm font-medium mb-2">
+                <label className="block text-white text-sm font-medium mb-2.5">
                   App Name
                 </label>
                 <input
                   type="text"
                   value={proposal.name}
                   onChange={(e) => updateProposal("name", e.target.value)}
-                  className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
                 />
               </div>
               <div>
-                <label className="block text-white text-sm font-medium mb-2">
+                <label className="block text-white text-sm font-medium mb-2.5">
                   URL Slug
                 </label>
-                <div className="flex items-center">
-                  <span className="text-slate-500 mr-1">https://</span>
+                <div className="flex items-center gap-1">
+                  <span className="text-white/30 text-sm">https://</span>
                   <input
                     type="text"
                     value={proposal.slug}
@@ -263,88 +281,88 @@ function ProposalEditorContent() {
                         e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-")
                       )
                     }
-                    className="flex-1 bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
                   />
-                  <span className="text-slate-500 ml-1">.theaiethos.com</span>
+                  <span className="text-white/30 text-sm">.theaiethos.com</span>
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-white text-sm font-medium mb-2">
+              <label className="block text-white text-sm font-medium mb-2.5">
                 Tagline
               </label>
               <input
                 type="text"
                 value={proposal.tagline}
                 onChange={(e) => updateProposal("tagline", e.target.value)}
-                className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
                 maxLength={60}
               />
-              <p className="text-slate-500 text-xs mt-1">
+              <p className="text-white/30 text-xs mt-2">
                 {proposal.tagline.length}/60 characters
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-white text-sm font-medium mb-2">
+                <label className="block text-white text-sm font-medium mb-2.5">
                   Icon
                 </label>
                 <input
                   type="text"
                   value={proposal.icon}
                   onChange={(e) => updateProposal("icon", e.target.value)}
-                  className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white text-2xl focus:outline-none focus:ring-2 focus:ring-violet-500"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-2xl text-center focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
                   maxLength={2}
                 />
               </div>
               <div>
-                <label className="block text-white text-sm font-medium mb-2">
+                <label className="block text-white text-sm font-medium mb-2.5">
                   Brand Color
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   <input
                     type="color"
                     value={proposal.color}
                     onChange={(e) => updateProposal("color", e.target.value)}
-                    className="h-10 w-16 bg-slate-900/50 border border-slate-600 rounded-lg cursor-pointer"
+                    className="h-12 w-16 bg-white/5 border border-white/10 rounded-xl cursor-pointer"
                   />
                   <input
                     type="text"
                     value={proposal.color}
                     onChange={(e) => updateProposal("color", e.target.value)}
-                    className="flex-1 bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all font-mono"
                   />
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-white text-sm font-medium mb-2">
+              <label className="block text-white text-sm font-medium mb-2.5">
                 SEO Title
               </label>
               <input
                 type="text"
                 value={proposal.meta.title}
                 onChange={(e) => updateProposal("meta.title", e.target.value)}
-                className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
                 maxLength={60}
               />
             </div>
 
             <div>
-              <label className="block text-white text-sm font-medium mb-2">
+              <label className="block text-white text-sm font-medium mb-2.5">
                 SEO Description
               </label>
               <textarea
                 value={proposal.meta.description}
                 onChange={(e) => updateProposal("meta.description", e.target.value)}
-                className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
-                rows={2}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all resize-none"
+                rows={3}
                 maxLength={160}
               />
-              <p className="text-slate-500 text-xs mt-1">
+              <p className="text-white/30 text-xs mt-2">
                 {proposal.meta.description.length}/160 characters
               </p>
             </div>
@@ -354,47 +372,47 @@ function ProposalEditorContent() {
         {activeTab === "landing" && (
           <div className="space-y-6">
             <div>
-              <label className="block text-white text-sm font-medium mb-2">
+              <label className="block text-white text-sm font-medium mb-2.5">
                 Headline
               </label>
               <input
                 type="text"
                 value={proposal.landing.headline}
                 onChange={(e) => updateProposal("landing.headline", e.target.value)}
-                className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white text-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-lg placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-white text-sm font-medium mb-2">
+              <label className="block text-white text-sm font-medium mb-2.5">
                 Problem Statement
               </label>
               <textarea
                 value={proposal.landing.problem}
                 onChange={(e) => updateProposal("landing.problem", e.target.value)}
-                className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
-                rows={2}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all resize-none"
+                rows={3}
               />
             </div>
 
             <div>
-              <label className="block text-white text-sm font-medium mb-2">
+              <label className="block text-white text-sm font-medium mb-2.5">
                 Solution Statement
               </label>
               <textarea
                 value={proposal.landing.solution}
                 onChange={(e) => updateProposal("landing.solution", e.target.value)}
-                className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none"
-                rows={2}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all resize-none"
+                rows={3}
               />
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-4">
                 <label className="text-white text-sm font-medium">Features</label>
                 <button
                   onClick={addFeature}
-                  className="text-violet-400 hover:text-violet-300 text-sm flex items-center gap-1"
+                  className="text-violet-400 hover:text-violet-300 text-sm flex items-center gap-1.5 font-medium transition-colors"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -406,13 +424,13 @@ function ProposalEditorContent() {
                 {proposal.landing.features.map((feature, i) => (
                   <div
                     key={i}
-                    className="flex gap-3 p-3 bg-slate-900/30 rounded-lg border border-slate-700/50"
+                    className="flex gap-3 p-4 bg-white/[0.02] rounded-xl border border-white/5"
                   >
                     <input
                       type="text"
                       value={feature.icon}
                       onChange={(e) => updateFeature(i, "icon", e.target.value)}
-                      className="w-12 bg-slate-800 border border-slate-600 rounded px-2 py-1 text-white text-center text-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
+                      className="w-14 bg-white/5 border border-white/10 rounded-lg px-2 py-2 text-white text-center text-lg focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all"
                       maxLength={2}
                     />
                     <div className="flex-1 space-y-2">
@@ -420,20 +438,20 @@ function ProposalEditorContent() {
                         type="text"
                         value={feature.title}
                         onChange={(e) => updateFeature(i, "title", e.target.value)}
-                        className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-1 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all"
                         placeholder="Feature title"
                       />
                       <input
                         type="text"
                         value={feature.description}
                         onChange={(e) => updateFeature(i, "description", e.target.value)}
-                        className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-1 text-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+                        className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white/70 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 transition-all"
                         placeholder="Feature description"
                       />
                     </div>
                     <button
                       onClick={() => removeFeature(i)}
-                      className="text-slate-500 hover:text-red-400 self-start p-1"
+                      className="text-white/30 hover:text-red-400 self-start p-2 transition-colors"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -445,14 +463,14 @@ function ProposalEditorContent() {
             </div>
 
             <div>
-              <label className="block text-white text-sm font-medium mb-2">
+              <label className="block text-white text-sm font-medium mb-2.5">
                 Call to Action Button
               </label>
               <input
                 type="text"
                 value={proposal.landing.cta}
                 onChange={(e) => updateProposal("landing.cta", e.target.value)}
-                className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
               />
             </div>
           </div>
@@ -460,7 +478,7 @@ function ProposalEditorContent() {
 
         {activeTab === "infra" && (
           <div className="space-y-4">
-            <p className="text-slate-400 text-sm mb-4">
+            <p className="text-white/50 text-sm mb-6">
               Choose which infrastructure components to include in your app.
             </p>
             {[
@@ -501,12 +519,12 @@ function ProposalEditorContent() {
             ].map((item) => (
               <label
                 key={item.key}
-                className={`flex items-start gap-4 p-4 rounded-xl border cursor-pointer transition-all ${
+                className={`flex items-start gap-4 p-5 rounded-xl border cursor-pointer transition-all ${
                   item.disabled
-                    ? "bg-slate-800/20 border-slate-700/30 cursor-not-allowed opacity-60"
+                    ? "bg-white/[0.01] border-white/5 cursor-not-allowed opacity-50"
                     : proposal.infrastructure[item.key as keyof typeof proposal.infrastructure]
-                    ? "bg-violet-600/10 border-violet-500/50"
-                    : "bg-slate-800/30 border-slate-700/50 hover:border-slate-600"
+                    ? "bg-violet-500/10 border-violet-500/30 shadow-lg shadow-violet-500/5"
+                    : "bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]"
                 }`}
               >
                 <input
@@ -520,19 +538,19 @@ function ProposalEditorContent() {
                     updateProposal(`infrastructure.${item.key}`, e.target.checked)
                   }
                   disabled={item.disabled}
-                  className="mt-1 h-5 w-5 rounded border-slate-600 bg-slate-900 text-violet-600 focus:ring-violet-500"
+                  className="mt-1 h-5 w-5 rounded border-white/20 bg-white/5 text-violet-600 focus:ring-violet-500 focus:ring-offset-0"
                 />
                 <div className="flex-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2.5">
                     <span className="text-xl">{item.icon}</span>
                     <span className="text-white font-medium">{item.title}</span>
                     {item.disabled && (
-                      <span className="text-xs bg-slate-700 text-slate-400 px-2 py-0.5 rounded">
+                      <span className="text-xs bg-white/10 text-white/40 px-2 py-0.5 rounded-full">
                         {item.disabledReason}
                       </span>
                     )}
                   </div>
-                  <p className="text-slate-400 text-sm mt-1">{item.desc}</p>
+                  <p className="text-white/40 text-sm mt-1.5 ml-8">{item.desc}</p>
                 </div>
               </label>
             ))}
@@ -541,40 +559,46 @@ function ProposalEditorContent() {
       </div>
 
       {/* Preview Card */}
-      <div className="mt-8 bg-slate-800/30 border border-slate-700/50 rounded-2xl p-6">
-        <h3 className="text-white font-semibold mb-4">Preview</h3>
+      <div className="mt-8 bg-white/[0.02] border border-white/10 rounded-2xl p-6 backdrop-blur-sm">
+        <h3 className="text-white font-semibold mb-5 flex items-center gap-2">
+          <span className="text-lg">👁️</span>
+          Preview
+        </h3>
         <div
-          className="p-6 rounded-xl"
-          style={{ backgroundColor: proposal.color + "10" }}
+          className="p-6 rounded-xl border"
+          style={{
+            backgroundColor: proposal.color + "08",
+            borderColor: proposal.color + "20"
+          }}
         >
-          <div className="flex items-center gap-3 mb-3">
-            <span
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-xl"
-              style={{ backgroundColor: proposal.color + "30" }}
+          <div className="flex items-center gap-4 mb-4">
+            <div
+              className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
+              style={{ backgroundColor: proposal.color + "25" }}
             >
               {proposal.icon}
-            </span>
+            </div>
             <div>
-              <h4 className="text-white font-semibold">{proposal.name}</h4>
-              <p className="text-slate-400 text-sm">{proposal.tagline}</p>
+              <h4 className="text-white font-semibold text-lg">{proposal.name}</h4>
+              <p className="text-white/50">{proposal.tagline}</p>
             </div>
           </div>
           <div className="flex gap-2 flex-wrap">
-            <span className="text-xs px-2 py-1 rounded bg-slate-700 text-slate-300">
+            <span className="text-xs px-3 py-1.5 rounded-full bg-white/10 text-white/60 font-medium">
               {proposal.slug}.theaiethos.com
             </span>
             {proposal.infrastructure.auth && (
-              <span className="text-xs px-2 py-1 rounded bg-violet-600/20 text-violet-300">
+              <span className="text-xs px-3 py-1.5 rounded-full bg-violet-500/20 text-violet-300 font-medium">
                 🔐 Auth
               </span>
             )}
             {proposal.infrastructure.feedback && (
-              <span className="text-xs px-2 py-1 rounded bg-cyan-600/20 text-cyan-300">
+              <span className="text-xs px-3 py-1.5 rounded-full bg-cyan-500/20 text-cyan-300 font-medium">
                 💬 Feedback
               </span>
             )}
             {proposal.infrastructure.onboarding && (
-              <span className="text-xs px-2 py-1 rounded bg-emerald-600/20 text-emerald-300">
+              <span className="text-xs px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 font-medium">
                 🎯 Onboarding
               </span>
             )}
@@ -589,9 +613,12 @@ export default function ProposalEditor() {
   return (
     <Suspense
       fallback={
-        <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-          <div className="animate-spin h-8 w-8 border-4 border-violet-500 border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-slate-400">Loading...</p>
+        <div className="min-h-[60vh] flex flex-col items-center justify-center px-6">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-violet-500/30 rounded-full" />
+            <div className="absolute inset-0 w-16 h-16 border-4 border-violet-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+          <p className="text-white/60 mt-6">Loading...</p>
         </div>
       }
     >

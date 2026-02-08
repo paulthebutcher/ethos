@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Launchpad | AI Ethos",
+  title: "Launchpad | Ship Your App Idea in Minutes",
   description:
-    "Turn your app idea into a fully-configured prototype in minutes. Launchpad sets up authentication, payments, feedback, onboarding, and more.",
+    "Turn your app idea into a fully-configured prototype in minutes. Launchpad sets up authentication, landing pages, feedback collection, onboarding, and more.",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://launchpad.theaiethos.com",
-    title: "Launchpad | AI Ethos",
+    title: "Launchpad | Ship Your App Idea in Minutes",
     description:
       "Turn your app idea into a fully-configured prototype in minutes.",
     siteName: "Launchpad",
@@ -21,32 +21,42 @@ export default function LaunchpadLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-[#0a0a0f] text-white">
       {/* Header */}
-      <header className="border-b border-slate-700/50 backdrop-blur-sm bg-slate-900/50 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <a href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🚀</span>
-            <span className="text-xl font-bold text-white">Launchpad</span>
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-xl">
+        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+          <a href="/launchpad" className="flex items-center gap-3 group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-violet-500/25 group-hover:shadow-violet-500/40 transition-shadow">
+              <span className="text-lg">🚀</span>
+            </div>
+            <span className="text-lg font-semibold tracking-tight">Launchpad</span>
           </a>
-          <nav className="flex items-center gap-6">
-            <a
-              href="https://theaiethos.com"
-              className="text-slate-400 hover:text-white transition-colors"
-            >
-              AI Ethos
-            </a>
-          </nav>
         </div>
       </header>
 
       {/* Main content */}
-      <main>{children}</main>
+      <main className="flex-1">{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-700/50 mt-auto">
-        <div className="max-w-6xl mx-auto px-6 py-8 text-center text-slate-500 text-sm">
-          <p>Built with Launchpad by AI Ethos</p>
+      <footer className="border-t border-white/10 bg-[#0a0a0f]">
+        <div className="max-w-5xl mx-auto px-6 py-10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
+                <span className="text-sm">🚀</span>
+              </div>
+              <div>
+                <div className="font-medium text-white/90">Launchpad</div>
+                <div className="text-sm text-white/50">Ship ideas faster</div>
+              </div>
+            </div>
+            <a
+              href="https://theaiethos.com"
+              className="text-sm text-white/40 hover:text-white/70 transition-colors"
+            >
+              Part of The AI Ethos →
+            </a>
+          </div>
         </div>
       </footer>
     </div>
