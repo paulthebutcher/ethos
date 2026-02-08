@@ -1,14 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { randomUUID } from "crypto";
+import { getProposal, setProposal } from "@/lib/launchpad-proposals";
 
 const anthropic = new Anthropic();
-
-// In-memory store for proposals (will be replaced with Supabase)
-const proposals = new Map<string, any>();
-
-// Export for other routes to access
-export { proposals };
 
 const SYSTEM_PROMPT = `You are Launchpad, an AI that helps users turn app ideas into complete project proposals.
 
@@ -124,15 +119,13 @@ ${JSON_SCHEMA}`,
     const id = randomUUID();
 
     // Store the proposal with the original idea
-    const storedProposal = {
+    setProposal(id, {
       id,
       idea: idea.trim(),
       proposal,
       createdAt: new Date().toISOString(),
-      status: "draft", // draft | building | complete | failed
-    };
-
-    proposals.set(id, storedProposal);
+      status: "draft",
+    });
 
     return NextResponse.json({ id, proposal });
   } catch (error: any) {
@@ -155,7 +148,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const proposal = proposals.get(id);
+  const proposal = getProposal(id);
   if (!proposal) {
     return NextResponse.json(
       { error: "Proposal not found" },
