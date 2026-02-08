@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 const STATS = [
-  { value: 2, label: "Building", color: "#0ea5e9" },
+  { value: 3, label: "Building", color: "#0ea5e9" },
   { value: 9, label: "Evaluating", color: "#6366f1" },
   { value: 0, label: "Shipped", color: "#22c55e" },
   { value: 5, label: "Killed", color: "#ef4444" },
@@ -41,7 +41,7 @@ export default function HomePage() {
               Projects
             </Link>
             <a
-              href="https://guildry.paulb.pro"
+              href="https://guildry.theaiethos.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs sm:text-sm font-medium px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-sky-500 text-white no-underline hover:bg-sky-600 transition-colors shadow-sm shadow-sky-200"
@@ -69,7 +69,7 @@ export default function HomePage() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
               </span>
-              <span className="text-sm text-slate-600">Building Guildry + Launchpad</span>
+              <span className="text-sm text-slate-600">Building Guildry, Launchpad, Dev Assistant</span>
             </div>
 
             {/* Headline */}
@@ -159,7 +159,7 @@ export default function HomePage() {
                   <Link href="/projects/guildry" className="flex-1 text-center px-4 py-2.5 rounded-lg text-xs font-semibold no-underline bg-slate-900 text-white hover:bg-slate-800 transition-colors">
                     View Plan
                   </Link>
-                  <a href="https://guildry.paulb.pro" target="_blank" rel="noopener noreferrer" className="flex-1 text-center px-4 py-2.5 rounded-lg text-xs font-semibold no-underline bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 transition-colors">
+                  <a href="https://guildry.theaiethos.com" target="_blank" rel="noopener noreferrer" className="flex-1 text-center px-4 py-2.5 rounded-lg text-xs font-semibold no-underline bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 transition-colors">
                     Open ↗
                   </a>
                 </div>
@@ -177,7 +177,7 @@ export default function HomePage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-slate-900">Launchpad</h3>
-                      <p className="text-xs text-slate-500">Idea validation</p>
+                      <p className="text-xs text-slate-500">Rapid app prototyping</p>
                     </div>
                   </div>
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-100 text-blue-700 border border-blue-200">
@@ -185,15 +185,47 @@ export default function HomePage() {
                   </span>
                 </div>
                 <p className="text-sm text-slate-600 mb-4 leading-relaxed flex-1">
-                  Landing pages for each idea. Collect waitlist signups as keep/kill signals. Ship, test, learn, repeat.
+                  Turn an app idea into a fully-configured prototype in minutes. AI generates landing pages, auth, feedback widgets, and docs.
                 </p>
                 <div className="flex gap-2">
                   <Link href="/projects/launchpad" className="flex-1 text-center px-4 py-2.5 rounded-lg text-xs font-semibold no-underline bg-slate-900 text-white hover:bg-slate-800 transition-colors">
                     View Plan
                   </Link>
-                  <Link href="/landing/smart-cms" className="flex-1 text-center px-4 py-2.5 rounded-lg text-xs font-semibold no-underline bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition-colors">
-                    See Example
+                  <a href="https://launchpad.theaiethos.com" target="_blank" rel="noopener noreferrer" className="flex-1 text-center px-4 py-2.5 rounded-lg text-xs font-semibold no-underline bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition-colors">
+                    Open ↗
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Dev Assistant Card */}
+            <div className="relative group md:col-span-2">
+              <div className="absolute -inset-1 bg-gradient-to-r from-sky-400 to-blue-500 rounded-2xl blur-lg opacity-20 group-hover:opacity-35 transition-opacity" />
+              <div className="relative bg-white rounded-2xl border border-sky-200 p-5 sm:p-6 shadow-xl shadow-sky-100/50 h-full flex flex-col">
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center text-lg shadow-lg shadow-sky-200 flex-shrink-0">
+                      🛠️
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900">Dev Assistant</h3>
+                      <p className="text-xs text-slate-500">Mobile development tool</p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-sky-100 text-sky-700 border border-sky-200">
+                    Phase 2
+                  </span>
+                </div>
+                <p className="text-sm text-slate-600 mb-4 leading-relaxed flex-1">
+                  AI-powered chat for managing codebases from anywhere. Read files, make edits, search code, and create PRs — all from your phone.
+                </p>
+                <div className="flex gap-2">
+                  <Link href="/projects/dev-assistant" className="flex-1 text-center px-4 py-2.5 rounded-lg text-xs font-semibold no-underline bg-slate-900 text-white hover:bg-slate-800 transition-colors">
+                    View Plan
                   </Link>
+                  <a href="/dev" className="flex-1 text-center px-4 py-2.5 rounded-lg text-xs font-semibold no-underline bg-sky-50 text-sky-700 border border-sky-200 hover:bg-sky-100 transition-colors">
+                    Open ↗
+                  </a>
                 </div>
               </div>
             </div>

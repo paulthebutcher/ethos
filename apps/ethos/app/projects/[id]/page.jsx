@@ -11,7 +11,9 @@ const SYNERGIES = {
     { id: "audit", reason: "Audit insights feed back into Guildry to improve future estimates" },
   ],
   launchpad: [
-    { id: "smart-cms", reason: "Landing pages can be built on the same infrastructure" },
+    { id: "smart-cms", reason: "Both generate websites from AI - shared infrastructure potential" },
+    { id: "guildry", reason: "Guildry could be rebuilt as a Launchpad app with all infrastructure auto-configured" },
+    { id: "dev-assistant", reason: "Dev Assistant enables mobile editing of Launchpad-generated code" },
   ],
   "dev-assistant": [
     { id: "guildry", reason: "Mobile dev enables faster iteration on Guildry features" },
@@ -213,134 +215,130 @@ The data exists. It's in old SOWs, time logs, retro notes, Slack threads. But no
   launchpad: {
     id: "launchpad",
     name: "Launchpad",
-    tagline: "Validate ideas with landing pages",
+    tagline: "Turn app ideas into prototypes in minutes",
     icon: "🚀",
     color: "#3b82f6",
-    description: "Generate polished landing pages for each product idea. Collect waitlist signups as keep/kill signals. Ship, test, learn, repeat.",
-    thesis: "Idea validation needs real signal from real people. Landing pages with waitlist forms measure interest before building. Fast iteration beats perfect planning.",
+    description: "AI-powered rapid app scaffolding. Describe your idea and Launchpad generates a complete prototype: landing page, auth, feedback widget, onboarding, and auto-generated docs.",
+    thesis: "Most app ideas die in planning. Launchpad removes friction by auto-generating infrastructure so you can validate faster. Ship in minutes, not months.",
     problem: `
-Validating product ideas is slow and expensive:
+Building apps requires too much boilerplate:
 
-Building MVPs takes weeks or months. By the time you have something to show, you've already committed significant resources. If the idea doesn't resonate, you've wasted time that could have validated something else.
+Every new project starts the same way: set up auth, create a landing page, add feedback collection, build onboarding flows, write documentation. Hours or days of repetitive work before you write a single line of core functionality.
 
-Surveys and interviews are biased. People say they want things they'll never pay for. The gap between stated interest and actual behavior is huge.
+This setup cost kills ideas. By the time you've got the basics working, you've lost momentum. The friction between "I have an idea" and "I have something to show" is too high.
 
-There's no middle ground. Either you build the whole thing or you're guessing. What's missing is a cheap, fast way to measure real interest before committing.
+What if infrastructure was instant? Describe your app in plain English and get everything configured: landing page with your branding, authentication wired up, feedback widget embedded, onboarding wizard ready, docs auto-generated. All you have to do is build the actual features.
 
-Email signups are an honest signal. Getting someone to give you their email for a waitlist takes 30 seconds but indicates real intent. If people won't even sign up, they definitely won't pay.
+That's what Launchpad does. It's the foundation that makes rapid prototyping possible.
     `.trim(),
     approaches: [
       {
-        name: "Template System (Current)",
-        description: "Data-driven landing pages with shared components and individual configs",
-        buildTime: "1 day",
-        complexity: "Low",
-        details: [
-          "Single template component renders any landing page from data",
-          "Each project gets a config object: headline, features, problem, solution",
-          "Resend integration sends welcome emails and tracks signups",
-          "Unique color scheme per project for brand differentiation",
-          "All pages share nav, footer, and waitlist form logic",
-        ],
-        pros: [
-          "New landing pages in minutes, just add data",
-          "Consistent quality across all pages",
-          "Easy A/B testing by swapping configs",
-          "Single codebase to maintain",
-        ],
-        cons: [
-          "Less flexibility for unique page layouts",
-          "All pages have same structure",
-          "Custom sections require template changes",
-        ],
-      },
-      {
-        name: "AI Generation",
-        description: "Generate landing page content from project thesis using AI",
-        buildTime: "2 weeks",
+        name: "AI Proposal Generation (Live)",
+        description: "Claude generates complete app proposals from natural language descriptions",
+        buildTime: "Done",
         complexity: "Medium",
         details: [
-          "Feed project thesis into Claude to generate headlines, features, etc.",
-          "Auto-generate problem/solution sections from description",
-          "Suggest color schemes based on project category",
-          "Human review before publish",
+          "User describes app idea in plain English",
+          "AI generates: name, slug, tagline, brand color, icon",
+          "Auto-creates landing page content: headline, problem, solution, features",
+          "Recommends infrastructure: auth, feedback, onboarding, payments",
+          "Generates SEO metadata for marketing",
         ],
         pros: [
-          "Even faster page creation",
-          "Consistent messaging quality",
-          "Could generate variations for testing",
+          "Natural language input - no forms to fill",
+          "Complete proposals in seconds",
+          "Consistent quality across all generated apps",
+          "AI understands context and generates relevant content",
         ],
         cons: [
-          "Adds dependency on AI quality",
-          "May lose nuance from manual copywriting",
-          "Still needs human review",
+          "May need manual refinement for edge cases",
+          "Dependent on AI model quality",
         ],
       },
       {
-        name: "Visual Builder",
-        description: "Drag-and-drop builder for custom landing pages",
-        buildTime: "4 weeks",
-        complexity: "High",
+        name: "Editable Proposal UI (Live)",
+        description: "Users can review and customize AI proposals before building",
+        buildTime: "Done",
+        complexity: "Medium",
         details: [
-          "Component library: heroes, features, testimonials, CTAs",
-          "WYSIWYG editing for each page",
-          "Save as config for version control",
-          "More flexibility per page",
+          "Tabbed interface: App Details, Landing Page, Infrastructure",
+          "Edit name, slug, colors, icon in real-time",
+          "Customize landing page content and features",
+          "Toggle infrastructure components on/off",
+          "Preview card shows final result",
         ],
         pros: [
-          "Maximum flexibility",
-          "Non-technical users can edit",
-          "Each page can be unique",
+          "Full control over generated content",
+          "See changes instantly",
+          "Keep AI speed, add human judgment",
         ],
         cons: [
-          "Much longer build time",
-          "Maintenance overhead",
-          "Overkill for current needs",
+          "Adds step between generation and deployment",
+        ],
+      },
+      {
+        name: "Streaming Build Progress (Live)",
+        description: "Real-time progress updates as apps are generated and deployed",
+        buildTime: "Done",
+        complexity: "Medium",
+        details: [
+          "Server-Sent Events for real-time status updates",
+          "Step-by-step progress: fetch, validate, register, landing, app, docs, deploy",
+          "Build logs for transparency",
+          "Success screen with live URLs",
+        ],
+        pros: [
+          "Clear feedback during build process",
+          "Users know exactly what's happening",
+          "Feels fast and responsive",
+        ],
+        cons: [
+          "More complex than simple form submission",
         ],
       },
     ],
     testPlan: {
-      hypothesis: "Landing pages with waitlist signups will generate enough signal to make keep/kill decisions in 2 weeks",
+      hypothesis: "Launchpad can reduce time-to-prototype from days to minutes, enabling faster idea validation",
       validation: [
         {
-          phase: "Launch All Pages",
-          duration: "1 day",
+          phase: "Core Flow Complete",
+          duration: "Done",
           actions: [
-            "Deploy landing pages for all 9 evaluating projects",
-            "Configure Resend for email collection",
-            "Set up basic analytics (page views, signup rate)",
-            "Share pages on relevant channels",
+            "Idea input → AI proposal → editable UI → build → deploy",
+            "Wildcard subdomain routing for each app",
+            "Auto-configured landing pages, app shells, and docs",
+            "Infrastructure toggling (auth, feedback, onboarding)",
           ],
-          successMetric: "All pages live and collecting signups",
+          successMetric: "End-to-end flow working in production",
         },
         {
-          phase: "Traffic Experiment",
-          duration: "2 weeks",
-          actions: [
-            "Drive traffic to pages via Twitter, Reddit, LinkedIn",
-            "Test different messaging for same products",
-            "Track: visits, signup rate, email open rate",
-            "Identify top 2-3 performers",
-          ],
-          successMetric: "Clear signal on which ideas resonate (10+ signups vs <2)",
-        },
-        {
-          phase: "Signal Analysis",
+          phase: "Supabase Persistence",
           duration: "1 week",
           actions: [
-            "Rank projects by signup rate and volume",
-            "Survey waitlist for deeper interest validation",
-            "Kill projects with <2 signups after 2 weeks",
-            "Prioritize building top performers",
+            "Replace in-memory store with Supabase tables",
+            "Store proposals, apps, feedback, waitlist signups",
+            "Enable app editing after initial creation",
+            "Add analytics tracking",
           ],
-          successMetric: "At least one project gets 20+ signups, ready to build",
+          successMetric: "Apps persist across deployments, data survives restarts",
+        },
+        {
+          phase: "Self-Hosting",
+          duration: "2 weeks",
+          actions: [
+            "Use Launchpad to build apps within the Ethos ecosystem",
+            "Guildry, Dev Assistant, etc. could be Launchpad apps",
+            "Validate: does generated infrastructure actually work?",
+            "Iterate on templates based on real usage",
+          ],
+          successMetric: "At least 2 production apps running on Launchpad infrastructure",
         },
       ],
       killCriteria: [
-        "Zero projects get >5 signups after 2 weeks of promotion",
-        "Signup-to-survey response rate below 10%",
-        "Traffic acquisition cost makes testing unsustainable",
-        "No clear winner emerges, all projects have similar low interest",
+        "Generated apps require too much manual fixing to be useful",
+        "Infrastructure components don't integrate cleanly",
+        "Build process is too slow (>5 minutes) to feel instant",
+        "Wildcard subdomains cause deployment or SSL issues",
       ],
     },
   },
