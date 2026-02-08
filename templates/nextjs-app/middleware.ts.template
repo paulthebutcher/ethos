@@ -1,0 +1,10 @@
+import { createAuthMiddleware, standardMatcherConfig } from "@guildry/auth/middleware";
+
+// Add any additional public routes here
+export default createAuthMiddleware([
+  "/",
+  "/pricing",
+  "/about",
+]);
+
+export const config = standardMatcherConfig;

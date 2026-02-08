@@ -1,0 +1,22 @@
+import type { Metadata } from "next";
+import { ClerkProvider } from "@guildry/auth";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "{{APP_TITLE}}",
+  description: "{{APP_DESCRIPTION}}",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <ClerkProvider>
+      <html lang="en">
+        <body className="antialiased">{children}</body>
+      </html>
+    </ClerkProvider>
+  );
+}

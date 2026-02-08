@@ -1,260 +1,152 @@
-# Guildry
+# The AI Ethos
 
-Project intelligence for agencies, studios, and consultancies. Guildry helps teams scope, staff, deliver, learn, and improve through AI-powered conversations.
+Solo AI product incubator. One developer, many experiments, shipping fast.
 
-**Status: Phase 1 (Core Loop) Complete** | [Roadmap](https://guildry.paulb.pro/roadmap) | [Website](https://guildry.paulb.pro/)
-
-## Overview
-
-Guildry is a suite of 7 integrated products:
-
-| Product | Purpose | Phase |
-|---------|---------|-------|
-| **Scout** | Market & competitor research | 3 |
-| **Compass** | Business strategy | 3 |
-| **Blueprint** | Project scoping & estimation | 1 |
-| **Bench** | Team skills & staffing | 1 |
-| **Relay** | Client management | 2 |
-| **Retro** | Project retrospectives | 1 |
-| **Proof** | Sales & proposals | 2 |
-
-## Tech Stack
-
-- **Monorepo**: pnpm + Turborepo
-- **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS
-- **Backend**: Next.js API Routes
-- **Database**: Supabase (PostgreSQL) with Row Level Security
-- **Auth**: Clerk with webhook sync
-- **AI**: Claude API with function calling
-- **Node**: v20 (see .nvmrc)
-
-## Project Structure
-
-```
-guildry/
-├── apps/
-│   └── web/                    # Next.js 14 application
-│       ├── app/                # App Router pages & API routes
-│       │   ├── (auth)/         # Auth pages (sign-in, sign-up)
-│       │   ├── (dashboard)/    # Protected dashboard routes
-│       │   └── api/            # API endpoints
-│       ├── components/         # React components
-│       └── lib/                # Utilities and helpers
-├── packages/
-│   ├── ai/                     # Claude client & conversation engine
-│   ├── database/               # Supabase client & type definitions
-│   └── ui/                     # Shared UI components
-├── docs/                       # Documentation
-│   ├── architecture/           # System design docs
-│   ├── guides/                 # Development guides
-│   ├── api/                    # API reference
-│   └── build-guides/           # Phase build instructions
-└── supabase/
-    └── migrations/             # Database migrations
-```
-
-## Getting Started
-
-### Prerequisites
-
-- **Node.js 20+** (use `nvm use` with included .nvmrc)
-- **pnpm 9+** (`npm install -g pnpm`)
-- **Supabase account** - [Sign up](https://supabase.com)
-- **Clerk account** - [Sign up](https://clerk.com)
-- **Anthropic API key** - [Get key](https://console.anthropic.com)
-
-### Local Development Setup
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/paulthebutcher/guildry.git
-   cd guildry
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   pnpm install
-   ```
-
-3. **Configure environment variables:**
-   ```bash
-   cp apps/web/.env.example apps/web/.env.local
-   ```
-
-   Then edit `apps/web/.env.local` with your actual credentials. See [apps/web/.env.example](apps/web/.env.example) for details on each variable.
-
-4. **Set up the database:**
-   - Create a new Supabase project
-   - Run migrations from `supabase/migrations/` (or use Supabase CLI)
-   - Configure Row Level Security policies
-   - Copy your Supabase URL and keys to `.env.local`
-
-5. **Configure Clerk webhook:**
-   - In Clerk Dashboard, go to Webhooks
-   - Add endpoint: `https://yourdomain.com/api/webhooks/clerk`
-   - Subscribe to: `user.created`, `user.updated`
-   - Copy webhook secret to `.env.local`
-
-6. **Run the development server:**
-   ```bash
-   pnpm dev
-   ```
-
-   The app will be available at `http://localhost:3000`.
-
-### Development Commands
+## 🚀 Quick Start: Create a New App
 
 ```bash
-pnpm dev         # Start development server (all packages in watch mode)
-pnpm build       # Build all apps and packages for production
-pnpm lint        # Lint all apps and packages
-pnpm test        # Run tests in watch mode
-pnpm test:ci     # Run tests once (for CI)
+# Create a new app in seconds
+npm run new-app invoice-ai "Invoice AI" "Smart invoice processing" 3005
+
+# Then:
+cd apps/invoice-ai
+cp .env.local.example .env.local  # Add your keys
+npm install
+npm run dev --workspace=@guildry/invoice-ai
 ```
 
-## Deployment
+## 📦 Monorepo Structure
 
-### Vercel (Recommended)
+```
+├── apps/
+│   ├── ethos/              # theaiethos.com - Hub site
+│   ├── guildry/            # guildry.theaiethos.com - Project intelligence
+│   └── [your-app]/         # your-app.theaiethos.com
+├── packages/
+│   ├── auth/               # Clerk integration, middleware, hooks
+│   ├── database/           # Supabase client & types
+│   ├── ai/                 # Claude client, prompts, tools
+│   ├── ui/                 # Shared React components
+│   └── config/             # Shared Tailwind, ESLint, TypeScript
+├── templates/
+│   └── nextjs-app/         # App template for scaffolding
+├── scripts/
+│   └── new-app.sh          # App scaffolding script
+└── docs/
+```
 
-1. **Push your code to GitHub**
+## 🧱 Shared Packages
 
-2. **Import project in Vercel:**
-   - Connect your GitHub repository
-   - Set root directory to `apps/web`
-   - Framework preset: Next.js
+### @guildry/auth
+```typescript
+// Server-side
+import { requireAuth, getAuthContext } from "@guildry/auth";
 
-3. **Configure environment variables:**
-   - Add all variables from `.env.example`
-   - Use production values for Clerk, Supabase, and Anthropic
+// Client-side
+import { SignIn, UserButton, useAuth } from "@guildry/auth";
 
-4. **Configure build settings:**
-   - Build command: `cd ../.. && pnpm run build --filter=@guildry/web`
-   - Output directory: `apps/web/.next`
-   - Install command: `pnpm install`
-
-5. **Deploy:**
-   - Vercel will automatically deploy on push to main
-   - Preview deployments for PRs
-
-### Other Platforms
-
-The app can be deployed to any platform that supports Next.js:
-
-- **Railway**: Connect repo, set root path, add env vars
-- **Render**: Create web service, set build command
-- **Netlify**: Import from Git, configure build settings
-- **Self-hosted**: Use `pnpm build` + `pnpm start` with Node.js 20+
-
-**Important:** Ensure all environment variables are set in your deployment platform.
-
-### Post-Deployment
-
-1. **Update Clerk webhook URL:**
-   - Set to `https://yourdomain.com/api/webhooks/clerk`
-
-2. **Configure Clerk redirect URLs:**
-   - Add your production domain to allowed redirect URLs
-
-3. **Update Supabase allowed origins:**
-   - Add your production domain to Supabase Dashboard > Authentication > URL Configuration
-
-4. **Test the deployment:**
-   - Sign up a new user
-   - Create a client via conversation
-   - Verify database records are created
-
-## Environment Variables
-
-See [apps/web/.env.example](apps/web/.env.example) for a complete list with descriptions.
-
-**Critical variables:**
-- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` - Clerk auth (public)
-- `CLERK_SECRET_KEY` - Clerk auth (secret)
-- `CLERK_WEBHOOK_SECRET` - Clerk webhook verification
-- `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
-- `SUPABASE_SERVICE_ROLE_KEY` - Supabase admin access (secret)
-- `ANTHROPIC_API_KEY` - Claude API access (secret)
-
-**Optional:**
-- `NEXT_PUBLIC_APP_URL` - Your production domain (defaults to localhost)
-
-## Packages
-
-### @guildry/web
-Next.js 14 application with App Router. Includes dashboard, client management, and AI conversation interface.
-
-### @guildry/database
-Supabase client configuration and TypeScript type definitions for all database tables. Exports both `supabase` (anon client with RLS) and `supabaseAdmin` (service client).
-
-### @guildry/ai
-Claude API client and conversation engine. Handles AI-powered conversations with function calling for CRUD operations. Supports multiple "target schemas" (client, project, retro).
+// Middleware
+import { createAuthMiddleware } from "@guildry/auth/middleware";
+```
 
 ### @guildry/ui
-Shared UI components (currently minimal, will grow as patterns emerge).
+```typescript
+import {
+  Button,
+  Card, CardHeader, CardTitle,
+  Input, Textarea,
+  Spinner, PageLoader,
+  PageContainer, PageHeader, Section
+} from "@guildry/ui";
+```
 
-## Documentation
+### @guildry/database
+```typescript
+import { createServiceClient } from "@guildry/database";
+```
 
-Full documentation is available in the `/docs` folder:
+### @guildry/ai
+```typescript
+import { createAIClient } from "@guildry/ai";
+```
 
-- [**Getting Started**](docs/getting-started.md) - Setup and configuration
-- [**Architecture**](docs/architecture/) - System design and data model
-- [**Guides**](docs/guides/) - Conventions, UI standards, testing, error handling
-- [**API Reference**](docs/api/) - Endpoint documentation
-- [**Build Guides**](docs/build-guides/) - Phase-by-phase implementation
+### @guildry/config
+```javascript
+// tailwind.config.js
+const sharedConfig = require("@guildry/config/tailwind");
+module.exports = { ...sharedConfig };
 
-## Design System
+// tsconfig.json
+{ "extends": "@guildry/config/typescript/nextjs" }
+```
 
-### Custom Tailwind Colors
+## 🛠️ Development
 
-Each product has a designated accent color:
+```bash
+# Install all dependencies
+npm install
 
-| Color | Hex | Product |
-|-------|-----|---------|
-| `accent-scout` | #b45309 | Scout (research) |
-| `accent-compass` | #4f46e5 | Compass (strategy) |
-| `accent-blueprint` | #0d9488 | Blueprint (scoping) |
-| `accent-bench` | #dc2626 | Bench (staffing) |
-| `accent-relay` | #7c3aed | Relay (clients) |
-| `accent-retro` | #db2777 | Retro (retrospectives) |
-| `accent-proof` | #059669 | Proof (sales) |
+# Run all apps
+npm run dev
 
-## Phase 0 Completion
+# Run specific app
+npm run dev --workspace=@guildry/ethos
 
-Phase 0 (Foundation) established the core infrastructure:
+# Build all
+npm run build
 
-- [x] Monorepo with pnpm + Turborepo
-- [x] Next.js 14 with App Router
-- [x] Clerk authentication with org support
-- [x] Supabase database with RLS policies
-- [x] Claude API integration with function calling
-- [x] AI conversation engine (target schema pattern)
-- [x] Client CRUD via natural language
-- [x] Error handling and loading states
-- [x] Testing infrastructure (Vitest)
-- [x] CI/CD with GitHub Actions
+# Create new app
+npm run new-app <name> [title] [description] [port]
+```
 
-## Phase 1 Completion
+## 🌐 Deployments
 
-Phase 1 (Core Loop) implemented the project intelligence system:
+| App | Domain | Vercel Root |
+|-----|--------|-------------|
+| Hub | theaiethos.com | `apps/ethos` |
+| Guildry | guildry.theaiethos.com | `apps/guildry` |
+| New App | newapp.theaiethos.com | `apps/newapp` |
 
-- [x] **Blueprint** - Conversational project scoping with phase suggestions and hour estimates
-- [x] **Bench** - Talent network management (employees, contractors, referrals) with skills tracking
-- [x] **Retro** - Project retrospectives capturing what worked, what didn't, and lessons learned
-- [x] Database schema for projects, phases, people, skills, and retrospectives
-- [x] AI tools for all three products with Claude function calling
-- [x] Optimistic UI for chat messages
-- [x] Auto-redirect to detail pages after entity creation
+### Deploy a New App to Vercel
 
-The core loop is now complete: **Scope project → Staff it → Deliver → Learn → Improve estimates**
+1. Go to [vercel.com/new](https://vercel.com/new)
+2. Import `paulthebutcher/ethos`
+3. Root Directory: `apps/your-app`
+4. Add environment variables
+5. Settings → Domains → `your-app.theaiethos.com`
 
-## Next Steps
+## 📋 Tech Stack
 
-Phase 2 will add client and sales capabilities:
-- **Relay**: Client management and communication tracking
-- **Proof**: Proposals and sales materials generation
+- **Framework**: Next.js 14 (App Router)
+- **Monorepo**: npm workspaces
+- **Styling**: Tailwind CSS
+- **Database**: Supabase (PostgreSQL)
+- **Auth**: Clerk
+- **AI**: Anthropic Claude API
+- **Deployment**: Vercel
 
-See [Phase 2 Build Guide](docs/build-guides/phase-2.md) for implementation details (coming soon).
+## 🔑 Environment Variables
 
-## License
+Each app needs:
+```env
+# Clerk
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# Optional: Anthropic (for AI features)
+ANTHROPIC_API_KEY=
+```
+
+## 📝 License
 
 Private - All rights reserved.
+
+---
+
+Built in public by [@paulbutcher](https://github.com/paulthebutcher)

@@ -1,10 +1,26 @@
 {
   "name": "@guildry/ui",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./button": "./src/components/Button.tsx",
+    "./card": "./src/components/Card.tsx",
+    "./input": "./src/components/Input.tsx",
+    "./spinner": "./src/components/Spinner.tsx",
+    "./layout": "./src/components/Layout.tsx"
+  },
   "scripts": {
     "lint": "echo 'No linting configured yet'"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18",
+    "typescript": "^5"
   }
 }

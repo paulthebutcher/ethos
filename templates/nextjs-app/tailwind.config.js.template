@@ -1,0 +1,10 @@
+const sharedConfig = require("@guildry/config/tailwind");
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  ...sharedConfig,
+  content: [
+    ...sharedConfig.content,
+    // Add app-specific content paths here
+  ],
+};

@@ -1,0 +1,14 @@
+{
+  "name": "@guildry/config",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    "./tailwind": "./tailwind.config.js",
+    "./typescript/nextjs": "./typescript/nextjs.json",
+    "./typescript/base": "./typescript/base.json",
+    "./eslint/nextjs": "./eslint/nextjs.js"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}
