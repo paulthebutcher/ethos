@@ -21,7 +21,7 @@ export default function LaunchpadLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white">
+    <div data-theme="dark" className="min-h-screen bg-[#0a0a0f] text-white">
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-xl">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">

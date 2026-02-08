@@ -30,8 +30,6 @@ html {
 }
 
 body {
-  background: var(--surface-0);
-  color: var(--text-primary);
   font-family: 'Inter', -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -56,6 +54,36 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--surface-4);
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --surface-0: #0a0a0f;
+  --surface-1: #12121a;
+  --surface-2: #1a1a24;
+  --surface-3: #2a2a3a;
+  --surface-4: #3a3a4a;
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+}
+
+[data-theme="dark"] ::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: #ffffff;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #12121a;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #2a2a3a;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #3a3a4a;
 }
 
 @layer utilities {
