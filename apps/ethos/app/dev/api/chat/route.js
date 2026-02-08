@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 
 // Initialize Anthropic client
@@ -100,7 +99,7 @@ const tools = [
         },
         path: {
           type: "string",
-          description: "Optional path filter (e.g., 'guildry/apps/ethos' to search only in that app)",
+          description: "Optional path filter (e.g., 'apps/ethos' to search only in that app)",
         },
         extension: {
           type: "string",
@@ -440,35 +439,8 @@ async function executeTool(name, input) {
   }
 }
 
-export async function POST(request) {
-  try {
-    // Simple auth check
-    const authHeader = request.headers.get("authorization");
-    const expectedToken = process.env.DEV_AUTH_TOKEN;
-
-    if (expectedToken && authHeader !== `Bearer ${expectedToken}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // Check required env vars
-    if (!process.env.ANTHROPIC_API_KEY) {
-      return NextResponse.json(
-        { error: "ANTHROPIC_API_KEY not configured. Add it to Vercel environment variables." },
-        { status: 500 }
-      );
-    }
-
-    if (!GITHUB_TOKEN) {
-      return NextResponse.json(
-        { error: "GITHUB_TOKEN not configured. Add it to Vercel environment variables." },
-        { status: 500 }
-      );
-    }
-
-    const { messages } = await request.json();
-
-    // System prompt for the dev assistant
-    const systemPrompt = `You are a development assistant for The AI Ethos, a solo AI product incubator. You have access to the GitHub repository and can help with:
+// System prompt for the dev assistant
+const systemPrompt = `You are a development assistant for The AI Ethos, a solo AI product incubator. You have access to the GitHub repository and can help with:
 
 - Reading and understanding code
 - Making edits to files (creates commits directly)
@@ -509,64 +481,205 @@ When making changes:
 
 Be concise. Show relevant code snippets, not entire files.`;
 
-    // Call Claude with tools
-    let response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 4096,
-      system: systemPrompt,
-      tools,
-      messages,
-    });
+export async function POST(request) {
+  try {
+    // Simple auth check
+    const authHeader = request.headers.get("authorization");
+    const expectedToken = process.env.DEV_AUTH_TOKEN;
 
-    // Collect all tool uses and results for the final response
-    const allToolUses = [];
+    if (expectedToken && authHeader !== `Bearer ${expectedToken}`) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
 
-    // Handle tool use in a loop
-    while (response.stop_reason === "tool_use") {
-      const toolUseBlocks = response.content.filter(
-        (block) => block.type === "tool_use"
+    // Check required env vars
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return new Response(
+        JSON.stringify({ error: "ANTHROPIC_API_KEY not configured. Add it to Vercel environment variables." }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
       );
+    }
 
-      // Track tool uses
-      toolUseBlocks.forEach((t) => allToolUses.push(t.name));
-
-      const toolResults = await Promise.all(
-        toolUseBlocks.map(async (toolUse) => {
-          const result = await executeTool(toolUse.name, toolUse.input);
-          return {
-            type: "tool_result",
-            tool_use_id: toolUse.id,
-            content: result,
-          };
-        })
+    if (!GITHUB_TOKEN) {
+      return new Response(
+        JSON.stringify({ error: "GITHUB_TOKEN not configured. Add it to Vercel environment variables." }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
       );
+    }
 
-      // Continue conversation with tool results
-      response = await anthropic.messages.create({
+    const { messages, stream = false } = await request.json();
+
+    // Non-streaming mode (for backwards compatibility)
+    if (!stream) {
+      let response = await anthropic.messages.create({
         model: "claude-sonnet-4-20250514",
         max_tokens: 4096,
         system: systemPrompt,
         tools,
-        messages: [
-          ...messages,
-          { role: "assistant", content: response.content },
-          { role: "user", content: toolResults },
-        ],
+        messages,
       });
+
+      const allToolUses = [];
+
+      // Handle tool use in a loop
+      while (response.stop_reason === "tool_use") {
+        const toolUseBlocks = response.content.filter(
+          (block) => block.type === "tool_use"
+        );
+
+        toolUseBlocks.forEach((t) => allToolUses.push(t.name));
+
+        const toolResults = await Promise.all(
+          toolUseBlocks.map(async (toolUse) => {
+            const result = await executeTool(toolUse.name, toolUse.input);
+            return {
+              type: "tool_result",
+              tool_use_id: toolUse.id,
+              content: result,
+            };
+          })
+        );
+
+        response = await anthropic.messages.create({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 4096,
+          system: systemPrompt,
+          tools,
+          messages: [
+            ...messages,
+            { role: "assistant", content: response.content },
+            { role: "user", content: toolResults },
+          ],
+        });
+      }
+
+      const textContent = response.content.find((block) => block.type === "text");
+
+      return new Response(
+        JSON.stringify({
+          response: textContent?.text || "No response",
+          toolsUsed: allToolUses,
+        }),
+        { headers: { "Content-Type": "application/json" } }
+      );
     }
 
-    // Extract text response
-    const textContent = response.content.find((block) => block.type === "text");
+    // Streaming mode
+    const encoder = new TextEncoder();
+    const stream_response = new ReadableStream({
+      async start(controller) {
+        const sendEvent = (event, data) => {
+          controller.enqueue(encoder.encode(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`));
+        };
 
-    return NextResponse.json({
-      response: textContent?.text || "No response",
-      toolsUsed: allToolUses,
+        try {
+          let currentMessages = [...messages];
+          const allToolUses = [];
+          let continueLoop = true;
+
+          while (continueLoop) {
+            const stream = await anthropic.messages.stream({
+              model: "claude-sonnet-4-20250514",
+              max_tokens: 4096,
+              system: systemPrompt,
+              tools,
+              messages: currentMessages,
+            });
+
+            let currentToolUses = [];
+            let hasToolUse = false;
+
+            for await (const event of stream) {
+              if (event.type === "content_block_start") {
+                if (event.content_block.type === "tool_use") {
+                  hasToolUse = true;
+                  const toolName = event.content_block.name;
+                  allToolUses.push(toolName);
+                  sendEvent("tool_start", { tool: toolName, id: event.content_block.id });
+                  currentToolUses.push({
+                    id: event.content_block.id,
+                    name: toolName,
+                    input: "",
+                  });
+                }
+              } else if (event.type === "content_block_delta") {
+                if (event.delta.type === "text_delta") {
+                  sendEvent("text", { text: event.delta.text });
+                } else if (event.delta.type === "input_json_delta") {
+                  // Accumulate tool input JSON
+                  const lastTool = currentToolUses[currentToolUses.length - 1];
+                  if (lastTool) {
+                    lastTool.input += event.delta.partial_json;
+                  }
+                }
+              } else if (event.type === "content_block_stop") {
+                // Tool use complete, parse and execute
+                const lastTool = currentToolUses[currentToolUses.length - 1];
+                if (lastTool && lastTool.input) {
+                  try {
+                    lastTool.parsedInput = JSON.parse(lastTool.input);
+                  } catch {
+                    lastTool.parsedInput = {};
+                  }
+                }
+              } else if (event.type === "message_stop") {
+                // Message complete
+              }
+            }
+
+            // Get final message for tool handling
+            const finalMessage = await stream.finalMessage();
+
+            if (hasToolUse && currentToolUses.length > 0) {
+              // Execute tools and continue
+              const toolResults = await Promise.all(
+                currentToolUses.map(async (toolUse) => {
+                  sendEvent("tool_executing", { tool: toolUse.name });
+                  const result = await executeTool(toolUse.name, toolUse.parsedInput || {});
+                  sendEvent("tool_result", { tool: toolUse.name, result: result.slice(0, 200) });
+                  return {
+                    type: "tool_result",
+                    tool_use_id: toolUse.id,
+                    content: result,
+                  };
+                })
+              );
+
+              // Update messages for next iteration
+              currentMessages = [
+                ...currentMessages,
+                { role: "assistant", content: finalMessage.content },
+                { role: "user", content: toolResults },
+              ];
+            } else {
+              // No more tools, we're done
+              continueLoop = false;
+            }
+          }
+
+          sendEvent("done", { toolsUsed: allToolUses });
+          controller.close();
+        } catch (error) {
+          sendEvent("error", { message: error.message });
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(stream_response, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      },
     });
   } catch (error) {
     console.error("Dev API error:", error);
-    return NextResponse.json(
-      { error: error.message || "Internal server error" },
-      { status: 500 }
+    return new Response(
+      JSON.stringify({ error: error.message || "Internal server error" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }

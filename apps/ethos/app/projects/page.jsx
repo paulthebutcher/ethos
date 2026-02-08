@@ -4,7 +4,7 @@ import Link from "next/link";
 
 // Projects with detail pages
 const PROJECTS_WITH_DETAILS = [
-  "guildry", "launchpad", "smart-cms", "changelog", "brief",
+  "guildry", "launchpad", "dev-assistant", "smart-cms", "changelog", "brief",
   "intake", "drift", "handoff",
   "terms", "forecast", "audit"
 ];
@@ -57,6 +57,29 @@ const PROJECTS = [
     ],
     icon: "🚀",
     color: "#3b82f6",
+  },
+  {
+    id: "dev-assistant",
+    name: "Dev Assistant",
+    tagline: "AI-powered mobile development tool",
+    description: "Chat interface for managing the codebase from anywhere. Read files, make edits, search code, view history, and create PRs — all powered by Claude with GitHub API tools.",
+    status: "in-progress",
+    layer: 1,
+    started: "Feb 2026",
+    links: {
+      site: "https://theaiethos.com/dev",
+      github: "https://github.com/paulthebutcher/ethos",
+    },
+    thesis: "Solo developers need to stay productive on the go. An AI assistant with direct GitHub access enables meaningful code work from mobile without a laptop.",
+    signals: [
+      "Live at theaiethos.com/dev with token auth",
+      "Full GitHub integration: read, write, search, commits, branches, PRs",
+      "Streaming responses for real-time feedback",
+      "File tree sidebar, voice input, conversation persistence",
+      "Built for iPhone-first mobile development workflow",
+    ],
+    icon: "🛠️",
+    color: "#0ea5e9",
   },
 
   // === EVALUATING ===

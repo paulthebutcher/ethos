@@ -13,6 +13,10 @@ const SYNERGIES = {
   launchpad: [
     { id: "smart-cms", reason: "Landing pages can be built on the same infrastructure" },
   ],
+  "dev-assistant": [
+    { id: "guildry", reason: "Mobile dev enables faster iteration on Guildry features" },
+    { id: "changelog", reason: "Commits made via Dev Assistant can auto-feed Changelog" },
+  ],
   "smart-cms": [
     { id: "launchpad", reason: "Share hosting and deployment infrastructure" },
     { id: "changelog", reason: "Both serve developer and agency audiences" },
@@ -54,6 +58,7 @@ const SYNERGIES = {
 const PROJECT_META = {
   guildry: { name: "Guildry", icon: "📐" },
   launchpad: { name: "Launchpad", icon: "🚀" },
+  "dev-assistant": { name: "Dev Assistant", icon: "🛠️" },
   "smart-cms": { name: "Smart CMS", icon: "🌐" },
   intake: { name: "Intake", icon: "🎙️" },
   brief: { name: "Brief", icon: "🎨" },
@@ -336,6 +341,142 @@ Email signups are an honest signal. Getting someone to give you their email for 
         "Signup-to-survey response rate below 10%",
         "Traffic acquisition cost makes testing unsustainable",
         "No clear winner emerges, all projects have similar low interest",
+      ],
+    },
+  },
+
+  "dev-assistant": {
+    id: "dev-assistant",
+    name: "Dev Assistant",
+    tagline: "AI-powered mobile development tool",
+    icon: "🛠️",
+    color: "#0ea5e9",
+    description: "Chat interface for managing the codebase from anywhere. Read files, make edits, search code, view history, and create PRs — all powered by Claude with GitHub API tools.",
+    thesis: "Solo developers need to stay productive on the go. An AI assistant with direct GitHub access enables meaningful code work from mobile without a laptop.",
+    problem: `
+Solo development is constrained by laptop access:
+
+You can read code on your phone, but you can't write it. Mobile GitHub apps show diffs but don't let you make meaningful changes. The moment you step away from your desk, development stops.
+
+AI changes this equation. Claude can understand context, navigate codebases, and execute code changes. What's missing is a mobile-first interface that gives AI the tools to actually interact with your repo.
+
+The result? A chat interface that lets you describe what you want, and an AI assistant that can read, write, search, and commit—directly from your phone while walking the dog.
+    `.trim(),
+    approaches: [
+      {
+        name: "GitHub API + Claude Tools (Current)",
+        description: "Chat interface with Claude using GitHub REST API as tools",
+        buildTime: "1 week",
+        complexity: "Medium",
+        details: [
+          "Claude with tool_use for: list_files, read_file, write_file, search_code",
+          "Additional tools: get_commits, get_file_history, create_branch, create_pr",
+          "Streaming responses for real-time feedback",
+          "Token-based auth for security",
+          "File tree sidebar for visual navigation",
+          "Voice input for hands-free dictation",
+          "Conversation persistence across sessions",
+        ],
+        pros: [
+          "Fast to build and iterate",
+          "Uses existing GitHub infrastructure",
+          "Claude handles all the complexity",
+          "Streaming makes it feel responsive",
+          "Works on any device with a browser",
+        ],
+        cons: [
+          "GitHub API rate limits for heavy usage",
+          "No syntax highlighting in editor",
+          "Commit-per-write is heavy for large changes",
+        ],
+      },
+      {
+        name: "Local LSP Integration",
+        description: "Run language server locally with Claude for smarter edits",
+        buildTime: "3-4 weeks",
+        complexity: "High",
+        details: [
+          "Self-hosted language server for TypeScript/JavaScript",
+          "Claude gets type info, jump-to-definition, find references",
+          "Smarter refactoring suggestions",
+          "Requires server infrastructure",
+        ],
+        pros: [
+          "Much smarter code understanding",
+          "Real IDE-level intelligence",
+          "Better refactoring support",
+        ],
+        cons: [
+          "Heavy infrastructure requirement",
+          "More complex deployment",
+          "Overkill for current needs",
+        ],
+      },
+      {
+        name: "VS Code Web Extension",
+        description: "Build as VS Code for Web extension instead of standalone",
+        buildTime: "2 weeks",
+        complexity: "Medium",
+        details: [
+          "Extension for vscode.dev or github.dev",
+          "Claude as a sidebar chat",
+          "Uses native editor capabilities",
+          "Inherits VS Code's file handling",
+        ],
+        pros: [
+          "Leverages existing VS Code ecosystem",
+          "Better code editing experience",
+          "Familiar interface for developers",
+        ],
+        cons: [
+          "Dependent on VS Code Web performance",
+          "Less control over mobile experience",
+          "Extension marketplace friction",
+        ],
+      },
+    ],
+    testPlan: {
+      hypothesis: "A Claude-powered dev assistant will enable meaningful code work from mobile, reducing laptop dependency by 30%+",
+      validation: [
+        {
+          phase: "Personal Dogfood",
+          duration: "2 weeks",
+          actions: [
+            "Use Dev Assistant for all non-critical code changes",
+            "Track: tasks completed, time saved, friction points",
+            "Iterate on UX based on real usage patterns",
+            "Document common workflows and pain points",
+          ],
+          successMetric: "Complete 20+ real commits via mobile assistant",
+        },
+        {
+          phase: "Feature Polish",
+          duration: "1 week",
+          actions: [
+            "Add streaming for responsive feel",
+            "Implement diff preview before commits",
+            "Add file tree navigation",
+            "Voice input for hands-free use",
+          ],
+          successMetric: "Full workflow feels smooth on iPhone",
+        },
+        {
+          phase: "External Testing",
+          duration: "2 weeks",
+          actions: [
+            "Share with 2-3 solo dev friends",
+            "Gather feedback on useful vs missing features",
+            "Test with different repo sizes and structures",
+            "Validate security model is sufficient",
+          ],
+          successMetric: "External users complete real commits, positive feedback",
+        },
+      ],
+      killCriteria: [
+        "GitHub API rate limits make real usage impractical",
+        "Claude consistently misunderstands code context",
+        "Mobile typing is still the bottleneck despite voice input",
+        "Security concerns outweigh productivity gains",
       ],
     },
   },
