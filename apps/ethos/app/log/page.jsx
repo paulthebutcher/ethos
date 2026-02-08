@@ -4,6 +4,30 @@
 // Add new entries at the top of this array
 const LOG_ENTRIES = [
   {
+    date: "2026-02-08",
+    title: "Launchpad UI built, architecture cleanup",
+    project: "launchpad",
+    content: `
+- Built full Launchpad UI at launchpad.theaiethos.com with dark theme
+- AI proposal generation: describe idea → get full app config (name, landing page, features, infrastructure)
+- Proposal editor with tabs: App Details, Landing Page, Infrastructure toggles
+- Build progress page with SSE streaming for real-time step updates
+- Fixed Clerk middleware integration for Guildry auth
+- Restructured CSS to app-level styling (no more global conflicts)
+    `.trim(),
+    decisions: [
+      "Each app gets its own CSS file - launchpad.css, main.css etc. prevents style bleeding",
+      "Dark theme for Launchpad to differentiate from main ethos site",
+      "Use clerkMiddleware() wrapper for all routes - enables auth() in any page that needs it",
+      "Subdomain routing in middleware handles guildry, launchpad, and dynamic app slugs",
+    ],
+    learnings: [
+      "Global CSS background colors override nested layout backgrounds - keep globals minimal",
+      "Next.js middleware can combine Clerk auth with custom subdomain routing",
+      "Wildcard subdomains enable rapid app deployment: {slug}.theaiethos.com",
+    ],
+  },
+  {
     date: "2026-02-07",
     title: "Guildry Phase 1 complete",
     project: "guildry",
@@ -72,6 +96,7 @@ function LogEntry({ entry }) {
   const projectColors = {
     guildry: "#0d9488",
     ethos: "#4f46e5",
+    launchpad: "#8b5cf6",
   };
   const color = projectColors[entry.project] || "#64748b";
 
