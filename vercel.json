@@ -1,10 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm run build",
-  "installCommand": "corepack enable pnpm && corepack prepare pnpm@10.0.0 --activate && pnpm install --no-frozen-lockfile",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install --legacy-peer-deps",
+  "framework": null,
   "build": {
     "env": {
-      "COREPACK_ENABLE_STRICT": "0"
+      "ENABLE_EXPERIMENTAL_COREPACK": "0",
+      "VERCEL_FORCE_NO_BUILD_CACHE": "1"
     }
   }
 }
